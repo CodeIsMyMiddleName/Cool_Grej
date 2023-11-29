@@ -12,4 +12,17 @@ show_image("https://www.shutterstock.com/shutterstock/photos/277499918/display_1
             300,
             300);
 
-var x = document.createElement("BUTTON");
+const root = document.getElementById("root");
+let x = document.createElement("button");
+x.setAttribute("id", "testKnapp")
+x.textContent = "Hej"
+root.appendChild(x);
+
+var myButton = document.getElementById("testKnapp");
+myButton.style.width = "5%";
+myButton.style.height = "10%";
+myButton.style.position = "absolute";
+myButton.style.top = "25%"
+myButton.style.left = "25%"
+
+
