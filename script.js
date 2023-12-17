@@ -88,11 +88,11 @@ class ReactionSpeedTest extends Minigame {
         var randint = Math.floor(Math.random() * 10);
 
         if(randint < 5) {
-            createButton("imgButtonCool", "", correctPress, "https://archive.is/dl1VH/80bfd71fe2ef1eb38780e9263424c34e1966eba8.jpg", "100px", "100px");
+            createButton("imgButtonCool", "", this.correctPress, "https://archive.is/dl1VH/80bfd71fe2ef1eb38780e9263424c34e1966eba8.jpg", "100px", "100px");
             createButton("imgButtonSad", "", null, "https://i.pinimg.com/originals/eb/d0/52/ebd0520f733cc1e8edbc352cec076fb5.gif", "100px", "100px");
         } else {
             createButton("imgButtonSad", "", null, "https://i.pinimg.com/originals/eb/d0/52/ebd0520f733cc1e8edbc352cec076fb5.gif", "100px", "100px");
-            createButton("imgButtonCool", "", correctPress, "https://archive.is/dl1VH/80bfd71fe2ef1eb38780e9263424c34e1966eba8.jpg", "100px", "100px");
+            createButton("imgButtonCool", "", this.correctPress, "https://archive.is/dl1VH/80bfd71fe2ef1eb38780e9263424c34e1966eba8.jpg", "100px", "100px");
         }
     }
 
@@ -113,6 +113,7 @@ class ReactionSpeedTest extends Minigame {
         
         // () => skapar en 
         //setTimeout(() => this.randomImageOrder(), this.randomWaitTime * 1000);
+        console.log(this);
         this.randomImageOrder();
         
         // GUI Element indelas i minigames
@@ -153,11 +154,14 @@ function createText(id, str, color, font) {
     root.appendChild(paragraph);
 }
 
-function createButton(id, name, onclick, src = null, height = 0, width = 0){
+function createButton(id, name, onclick, src = null, height = 0, width = 0) {
     let button = document.createElement("button");
     button.setAttribute("id", id);
     button.textContent = name;
-    button.addEventListener("click", onclick);
+    
+    if(onclick != null) {    
+        button.addEventListener("click", onclick.bind(reactionSpeedTest));
+    }
 
     if(src != null) {
         var imgElement = document.createElement('img');
