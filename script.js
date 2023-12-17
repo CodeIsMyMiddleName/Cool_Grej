@@ -97,7 +97,7 @@ class ReactionSpeedTest extends Minigame {
     }
 
     correctPress() {
-
+        
     }
     
     reactionTestStart() {
@@ -112,9 +112,7 @@ class ReactionSpeedTest extends Minigame {
         this.randomWaitTime = Math.floor(Math.random() * 3) + 3;
         
         // () => skapar en 
-        //setTimeout(() => this.randomImageOrder(), this.randomWaitTime * 1000);
-        console.log(this);
-        this.randomImageOrder();
+        setTimeout(() => this.randomImageOrder(), this.randomWaitTime * 1000);
         
         // GUI Element indelas i minigames
         var reactionTitle = document.getElementById("reactionTitle");
