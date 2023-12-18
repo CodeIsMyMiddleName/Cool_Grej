@@ -9,7 +9,6 @@ class Minigame {
     constructor() {
         this.guiElements = [];
         this.highscore = NaN;
-        this.title = "";
     }
     
     createGame() { // är nu startsidan av default pga oväntade ändringar i strukturen.
@@ -24,13 +23,13 @@ class Minigame {
         createText("startText", "Välj ett spel för att komma igång!", "black", FONTTYPE2);
 
         // GUI Element delas in i sitt objekt
-        var startTitle = document.getElementById("startText");
+        let startTitle = document.getElementById("startText");
         startSida.guiElements.push(startTitle);
         
-        var startImage = document.getElementById("startBild");
+        let startImage = document.getElementById("startBild");
         startSida.guiElements.push(startImage);
         
-        var activateReactionButton = document.getElementById("activateReactionTest"); 
+        let activateReactionButton = document.getElementById("activateReactionTest"); 
         startSida.guiElements.push(activateReactionButton);
 
         
@@ -49,7 +48,9 @@ class ReactionSpeedTest extends Minigame {
         this.currentTime = NaN;
         this.totalTries = [];
         this.randomWaitTime = 0;
+        this.startTime = 0;
     }
+
     createGame() {
         //GUI Element Skapas
         createText("reactionTitle", "Reaktions Test", "black", FONTTYPE1);
@@ -64,28 +65,30 @@ class ReactionSpeedTest extends Minigame {
         createButton("reaktionsStart", "Start!", reactionSpeedTest.reactionTestStart);
 
         // GUI Element indelas i minigames
-        var reactionTitle = document.getElementById("reactionTitle");
+        let reactionTitle = document.getElementById("reactionTitle");
         reactionSpeedTest.guiElements.push(reactionTitle);
 
-        var coolSmiley = document.getElementById("coolSmiley");
+        let coolSmiley = document.getElementById("coolSmiley");
         reactionSpeedTest.guiElements.push(coolSmiley);
 
-        var sadSmiley = document.getElementById("sadSmiley");
+        let sadSmiley = document.getElementById("sadSmiley");
         reactionSpeedTest.guiElements.push(sadSmiley);
 
-        var reaktionsBeskrivning1 = document.getElementById("reaktionsBeskrivning1");
+        let reaktionsBeskrivning1 = document.getElementById("reaktionsBeskrivning1");
         reactionSpeedTest.guiElements.push(reaktionsBeskrivning1);
 
-        var reaktionsBeskrivning2 = document.getElementById("reaktionsBeskrivning2");
+        let reaktionsBeskrivning2 = document.getElementById("reaktionsBeskrivning2");
         reactionSpeedTest.guiElements.push(reaktionsBeskrivning2);
         
-        var reactionStart = document.getElementById("reaktionsStart");
+        let reactionStart = document.getElementById("reaktionsStart");
         reactionSpeedTest.guiElements.push(reactionStart);
         
     }
     
     randomImageOrder() {
-        var randint = Math.floor(Math.random() * 10);
+        let randint = Math.floor(Math.random() * 10);
+
+        this.startTime = new Date();
 
         if(randint < 5) {
             createButton("imgButtonCool", "", this.correctPress, "https://archive.is/dl1VH/80bfd71fe2ef1eb38780e9263424c34e1966eba8.jpg", "100px", "100px");
@@ -97,12 +100,16 @@ class ReactionSpeedTest extends Minigame {
     }
 
     correctPress() {
-        
+        let time = new Date();
+        let deltaTime = time - this.startTime;
+        this.currentTime = new Date(deltaTime);
+        console.log(deltaTime);
+        console.log(this.currentTime.toLocaleString("en-GB", { timeZone: "Europe/London", fractionalSecondDigits: 3, minute: '2-digit', second: '2-digit' }));
     }
     
     reactionTestStart() {
         reactionSpeedTest.removeGame();
-        
+
         //GUI Element Skapas
         createText("reactionTitle", "Reaktions Test", "black", FONTTYPE1);
         
@@ -115,23 +122,23 @@ class ReactionSpeedTest extends Minigame {
         setTimeout(() => this.randomImageOrder(), this.randomWaitTime * 1000);
         
         // GUI Element indelas i minigames
-        var reactionTitle = document.getElementById("reactionTitle");
+        let reactionTitle = document.getElementById("reactionTitle");
         reactionSpeedTest.guiElements.push(reactionTitle);
         
-        var coolSmiley = document.getElementById("coolSmiley");
+        let coolSmiley = document.getElementById("coolSmiley");
         reactionSpeedTest.guiElements.push(coolSmiley);
         
-        var sadSmiley = document.getElementById("sadSmiley");
+        let sadSmiley = document.getElementById("sadSmiley");
         reactionSpeedTest.guiElements.push(sadSmiley);
         
-        var latestSpeed = document.getElementById("latestSpeed");
+        let latestSpeed = document.getElementById("latestSpeed");
         reactionSpeedTest.guiElements.push(latestSpeed);
     }
 }
     
 
     function createImage(src, id, width, height) {
-    var img = document.createElement("img");
+    let img = document.createElement("img");
     img.src = src;
     img.setAttribute("id", id)
     img.width = width;
@@ -141,8 +148,8 @@ class ReactionSpeedTest extends Minigame {
 }
 
 function createText(id, str, color, font) {
-    var textNode = document.createTextNode(str);
-    var paragraph = document.createElement("p");
+    let textNode = document.createTextNode(str);
+    let paragraph = document.createElement("p");
 
     paragraph.setAttribute("id", id);
     paragraph.style.color = color;
@@ -162,7 +169,7 @@ function createButton(id, name, onclick, src = null, height = 0, width = 0) {
     }
 
     if(src != null) {
-        var imgElement = document.createElement('img');
+        let imgElement = document.createElement('img');
         imgElement.src = src;
         imgElement.alt = "Bilden finns inte tillgänglig";
         imgElement.style.height = height;
