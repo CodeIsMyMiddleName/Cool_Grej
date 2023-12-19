@@ -9,15 +9,42 @@
     height: 0px;
 }
 
-/*
+body {
+    background-color: aquamarine;
+    background-image: url("https://mir-s3-cdn-cf.behance.net/projects/404/13673543.54846d0d43c63.jpg");
+    background-size: cover;
+}
+
 button {
-    background-color: #04AA6D; 
-    border: none;
-    color: white;
-    padding: 15px 32px;
+    background-color:   antiquewhite; 
+    border: 2px solid black;
+    border-radius: 4px;
+    color: black;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
-*/
+
+button:hover {
+    background-color: rgb(225, 211, 194);
+}
+
+button:focus {
+    background-color: white;
+}
+
+p {
+    text-shadow: 
+        -1px -1px 0 #000,  
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;
+    margin: 20px;
+}
+
+img {
+    margin: 5px;
+}

@@ -14,7 +14,7 @@ class Minigame {
     
     createGame() { // är nu startsidan av default pga oväntade ändringar i strukturen.
         // GUI Element skapas
-        createText("startTitle", "GrymmaSpelTM", "darkgreen", FONTTYPE4);
+        createText("startTitle", "GrymmaSpelTM", "green", FONTTYPE4);
 
         createImage("https://www.shutterstock.com/shutterstock/photos/277499918/display_1500/stock-photo-cool-skeleton-heart-a-cool-skeleton-wearing-a-leather-jacket-and-sunglasses-with-a-smoke-in-his-277499918.jpg", 
             "startBild",
@@ -22,8 +22,9 @@ class Minigame {
             300);
 
         createButton("activateReactionTest", "Reaktionsförmåge Test", activateReactionTest, this);
+        createButton("activateNumberGuess", "Gissa Talet", activateNumberGuess, this);
 
-        createText("startText", "Välj ett spel för att komma igång!", "black", FONTTYPE2);
+        createText("startText", "Välj ett spel för att sätta igång!", "white", FONTTYPE2);
 
         // GUI Element delas in i sitt objekt
         let startTitle = document.getElementById("startTitle");
@@ -38,7 +39,8 @@ class Minigame {
         let activateReactionButton = document.getElementById("activateReactionTest"); 
         startSida.guiElements.push(activateReactionButton);
 
-        
+        let activateNumberGuessButton = document.getElementById("activateNumberGuess");
+        startSida.guiElements.push(activateNumberGuessButton);
     }
 
     removeGame() {   
@@ -57,7 +59,7 @@ class ReactionSpeedTest extends Minigame {
         this.totalTries = [];
         this.randomWaitTime = 0;
         this.startTime = null;
-        this.rounds = 1;
+        this.rounds = 6;
     }
 
     createGame() {
@@ -66,14 +68,14 @@ class ReactionSpeedTest extends Minigame {
         this.totalTries = [];
 
         //GUI Element Skapas
-        createText("reactionTitle", "Reaktions Test", "black", FONTTYPE1);
+        createText("reactionTitle", "Reaktions Test", "white", FONTTYPE1);
 
         createImage("https://archive.is/dl1VH/80bfd71fe2ef1eb38780e9263424c34e1966eba8.jpg", "coolSmiley", 100, 100);
         
         createImage("https://i.pinimg.com/originals/eb/d0/52/ebd0520f733cc1e8edbc352cec076fb5.gif", "sadSmiley", 100, 100);
 
-        createText("reaktionsBeskrivning1", "Du kommer att visas 2 bilder i slumpmessig ordning", "black", FONTTYPE2);
-        createText("reaktionsBeskrivning2", `Klicka på bilden som säger cool så snabbt som möjligt så får du ett betyg efter ${this.rounds} försök!`, "black", FONTTYPE2);
+        createText("reaktionsBeskrivning1", "Du kommer att visas 2 bilder i slumpmessig ordning", "white", FONTTYPE2);
+        createText("reaktionsBeskrivning2", `Klicka på bilden som säger cool så snabbt som möjligt så får du ett betyg efter ${this.rounds} försök!`, "white", FONTTYPE2);
 
         createButton("reaktionsStart", "Start!", this.reactionTestStart, this);
 
@@ -140,11 +142,11 @@ class ReactionSpeedTest extends Minigame {
         let fastestTime = new Date(Math.min(...this.totalTries));
 
         //GUI Element Skapas
-        createText("reactionTitle", "Reaktions Test", "black", FONTTYPE1);
-        createText("resultsTitle", "Resultat:", "black", FONTTYPE3);
+        createText("reactionTitle", "Reaktions Test", "white", FONTTYPE1);
+        createText("resultsTitle", "Resultat:", "white", FONTTYPE3);
 
-        createText("averageTimeDisplay", `Din genomsnittliga tid var ${averageTime.toLocaleString("en-GB", { timeZone: "Europe/London", fractionalSecondDigits: 3, second: '2-digit' })}s.`, "black", FONTTYPE2);
-        createText("fastestTimeDisplay", `Din snabbaste tid var ${fastestTime.toLocaleString("en-GB", { timeZone: "Europe/London", fractionalSecondDigits: 3, second: '2-digit' })}s.`, "black", FONTTYPE2);
+        createText("averageTimeDisplay", `Din genomsnittliga tid var ${averageTime.toLocaleString("en-GB", { timeZone: "Europe/London", fractionalSecondDigits: 3, second: '2-digit' })}s.`, "white", FONTTYPE2);
+        createText("fastestTimeDisplay", `Din snabbaste tid var ${fastestTime.toLocaleString("en-GB", { timeZone: "Europe/London", fractionalSecondDigits: 3, second: '2-digit' })}s.`, "white", FONTTYPE2);
         
         createButton("restartButton", "Försök igen?", this.resetGame, this);
 
@@ -187,9 +189,9 @@ class ReactionSpeedTest extends Minigame {
         this.removeGame();
 
         //GUI Element Skapas
-        createText("reactionTitle", "Reaktions Test", "black", FONTTYPE1);
+        createText("reactionTitle", "Reaktions Test", "white", FONTTYPE1);
         
-        createText("latestMessage", String(this.displayMessage), "black", FONTTYPE2);
+        createText("latestMessage", String(this.displayMessage), "white", FONTTYPE2);
         
         // siffra mellan 3 och 6
         this.randomWaitTime = Math.floor(Math.random() * 3) + 3;
@@ -212,8 +214,51 @@ class ReactionSpeedTest extends Minigame {
     }
 }
 
+class NumberGuess extends Minigame{ 
+    constructor() {
+        super();
+    }
 
-    function createImage(src, id, width, height) {
+    createGame() {
+        //GUI Element Skapas
+        createText("numberGuessTitle", "Gissa Talet", "white", FONTTYPE1);
+        
+        createText("numberGuessExplination1", "Ett hemligt tal mellan 1 och 100 kommer att väljas ut av datorn", "white", FONTTYPE2);
+        createText("numberGuessExplination2", "När du gör en gissning kommer du få veta om du gissade för högt eller för lågt", "white", FONTTYPE2);
+        createText("numberGuessExplination3", "Försök lista ut rätt tal med så få gissningar som möjligt!", "white", FONTTYPE2);
+
+        createButton("numberGuessStartButton", "Starta!", this.numberGuessStart, this);
+
+        // GUI Element indelas i minigames
+        let numberGuessTitle = document.getElementById("numberGuessTitle");
+        this.guiElements.push(numberGuessTitle);
+
+        let numberGuessExplination1 = document.getElementById("numberGuessExplination1");
+        this.guiElements.push(numberGuessExplination1);
+        
+        let numberGuessExplination2 = document.getElementById("numberGuessExplination2");
+        this.guiElements.push(numberGuessExplination2);
+        
+        let numberGuessExplination3 = document.getElementById("numberGuessExplination3");
+        this.guiElements.push(numberGuessExplination3);
+
+        let numberGuessStartButton = document.getElementById("numberGuessStartButton");
+        this.guiElements.push(numberGuessStartButton);
+    }
+
+    numberGuessStart() {
+        this.removeGame();
+        
+        //GUI Elemnt Skapas
+        createText("numberGuessTitle", "Gissa Talet", "white", FONTTYPE1);
+
+        // GUI Element indelas i minigames
+        let numberGuessTitle = document.getElementById("numberGuessTitle");
+        this.guiElements.push(numberGuessTitle);
+    }
+} 
+
+function createImage(src, id, width, height) {
     let img = document.createElement("img");
     img.src = src;
     img.setAttribute("id", id)
@@ -272,6 +317,10 @@ function activateReactionTest() {
     activateGame(reactionSpeedTest, lastGame);
 }
 
+function activateNumberGuess() {
+    activateGame(numberGuess, lastGame);
+}
+
 function homePage() {
     activateGame(startSida, lastGame);
 }
@@ -279,6 +328,7 @@ function homePage() {
 // Skapa spelen
 let startSida = new Minigame;
 let reactionSpeedTest = new ReactionSpeedTest;
+let numberGuess = new NumberGuess;
 
 // variabel som underlättar byte av minigame
 let lastGame = startSida;
