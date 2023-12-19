@@ -1,11 +1,11 @@
 const root = document.getElementById("root");
-const reactionTest = document.getElementById("reactionTest");
+const special = document.getElementById("special");
 
 // Constants
 const FONTTYPE1 = "oblique normal bold 60px 'Times New Roman', serif";
 const FONTTYPE2 = "normal normal bold 20px 'Arial', sans-serif";
 const FONTTYPE3 = "normal normal bold 30px 'Times New Roman', serif";
-const FONTTYPE4 = "oblique normal bold 50px/0.1 'Times New Roman', serif";
+const FONTTYPE4 = "oblique normal bold 50px 'Times New Roman', serif";
 class Minigame {
     constructor() {
         this.guiElements = [];
@@ -21,7 +21,7 @@ class Minigame {
             300,
             300);
 
-        createButton("activateReactionTest", "Reaktionsförmåge Test", activateReactionTest);
+        createButton("activateReactionTest", "Reaktionsförmåge Test", activateReactionTest, this);
 
         createText("startText", "Välj ett spel för att komma igång!", "black", FONTTYPE2);
 
@@ -75,7 +75,7 @@ class ReactionSpeedTest extends Minigame {
         createText("reaktionsBeskrivning1", "Du kommer att visas 2 bilder i slumpmessig ordning", "black", FONTTYPE2);
         createText("reaktionsBeskrivning2", `Klicka på bilden som säger cool så snabbt som möjligt så får du ett betyg efter ${this.rounds} försök!`, "black", FONTTYPE2);
 
-        createButton("reaktionsStart", "Start!", this.reactionTestStart);
+        createButton("reaktionsStart", "Start!", this.reactionTestStart, this);
 
         // GUI Element indelas i minigames
         let reactionTitle = document.getElementById("reactionTitle");
@@ -111,11 +111,11 @@ class ReactionSpeedTest extends Minigame {
         document.getElementById("latestMessage").innerText = "Kör!";
 
         if(randint < 5) {
-            createButton("imgButtonCool", "", this.correctPress, "https://archive.is/dl1VH/80bfd71fe2ef1eb38780e9263424c34e1966eba8.jpg", "100px", "100px");
-            createButton("imgButtonSad", "", null, "https://i.pinimg.com/originals/eb/d0/52/ebd0520f733cc1e8edbc352cec076fb5.gif", "100px", "100px");
+            createButton("imgButtonCool", "", this.correctPress, this, "https://archive.is/dl1VH/80bfd71fe2ef1eb38780e9263424c34e1966eba8.jpg", "100px", "100px");
+            createButton("imgButtonSad", "", null, this, "https://i.pinimg.com/originals/eb/d0/52/ebd0520f733cc1e8edbc352cec076fb5.gif", "100px", "100px");
         } else {
-            createButton("imgButtonSad", "", null, "https://i.pinimg.com/originals/eb/d0/52/ebd0520f733cc1e8edbc352cec076fb5.gif", "100px", "100px");
-            createButton("imgButtonCool", "", this.correctPress, "https://archive.is/dl1VH/80bfd71fe2ef1eb38780e9263424c34e1966eba8.jpg", "100px", "100px");
+            createButton("imgButtonSad", "", null, this, "https://i.pinimg.com/originals/eb/d0/52/ebd0520f733cc1e8edbc352cec076fb5.gif", "100px", "100px");
+            createButton("imgButtonCool", "", this.correctPress, this, "https://archive.is/dl1VH/80bfd71fe2ef1eb38780e9263424c34e1966eba8.jpg", "100px", "100px");
         }
         // GUI Element indelas i minigames
         let imgButtonCool = document.getElementById("imgButtonCool");
@@ -146,7 +146,7 @@ class ReactionSpeedTest extends Minigame {
         createText("averageTimeDisplay", `Din genomsnittliga tid var ${averageTime.toLocaleString("en-GB", { timeZone: "Europe/London", fractionalSecondDigits: 3, second: '2-digit' })}s.`, "black", FONTTYPE2);
         createText("fastestTimeDisplay", `Din snabbaste tid var ${fastestTime.toLocaleString("en-GB", { timeZone: "Europe/London", fractionalSecondDigits: 3, second: '2-digit' })}s.`, "black", FONTTYPE2);
         
-        createButton("restartButton", "Försök igen?", this.resetGame);
+        createButton("restartButton", "Försök igen?", this.resetGame, this);
 
         // GUI Element indelas i minigames
         let reactionTitle = document.getElementById("reactionTitle");
@@ -235,13 +235,13 @@ function createText(id, str, color, font) {
     root.appendChild(paragraph);
 }
 
-function createButton(id, name, onclick, src = null, height = 0, width = 0) {
+function createButton(id, name, onclick, minigame, src = null, height = 0, width = 0, isSpecial = false) {
     let button = document.createElement("button");
     button.setAttribute("id", id);
     button.textContent = name;
     
     if(onclick != null) {    
-        button.addEventListener("click", onclick.bind(reactionSpeedTest));
+        button.addEventListener("click", onclick.bind(minigame));
     }
 
     if(src != null) {
@@ -254,20 +254,27 @@ function createButton(id, name, onclick, src = null, height = 0, width = 0) {
         button.appendChild(imgElement);
     }
 
-    root.appendChild(button);
+    if (isSpecial) {
+        special.appendChild(button);
+    }else {
+        root.appendChild(button);
+    }
 }
 
 function activateGame(game, removedGame) {
     removedGame.removeGame();
 
     game.createGame();
-    lastGame = reactionSpeedTest;
+    lastGame = game;
 }
 
 function activateReactionTest() {
     activateGame(reactionSpeedTest, lastGame);
 }
 
+function homePage() {
+    activateGame(startSida, lastGame);
+}
 
 // Skapa spelen
 let startSida = new Minigame;
@@ -278,3 +285,6 @@ let lastGame = startSida;
 
 //Aktivera Hemsidan
 startSida.createGame();
+
+// Skapa hemknapp
+createButton("homeButton", "", homePage, null, "https://cdn-icons-png.flaticon.com/512/61/61972.png", "30px", "30px", true);
