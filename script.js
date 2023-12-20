@@ -49,6 +49,11 @@ class Minigame {
         }
         this.guiElements = [];
     }
+    
+    resetGame() {
+        this.removeGame();
+        this.createGame();
+    } 
 }
 
 class ReactionSpeedTest extends Minigame {
@@ -98,11 +103,6 @@ class ReactionSpeedTest extends Minigame {
         let reactionStart = document.getElementById("reaktionsStart");
         this.guiElements.push(reactionStart);
         
-    }
-
-    resetGame() {
-        this.removeGame();
-        this.createGame();
     }
     
     randomImageOrder() {
@@ -182,7 +182,7 @@ class ReactionSpeedTest extends Minigame {
             this.reactionTestStart();
         } else {
             this.reactionTestStart();
-        }    
+        }
     }
 
     reactionTestStart() {
@@ -217,6 +217,9 @@ class ReactionSpeedTest extends Minigame {
 class NumberGuess extends Minigame{ 
     constructor() {
         super();
+        this.randomNumber = NaN;
+        this.guessAmount = 0;
+        this.guessFeedback = "";
     }
 
     createGame() {
@@ -246,15 +249,89 @@ class NumberGuess extends Minigame{
         this.guiElements.push(numberGuessStartButton);
     }
 
-    numberGuessStart() {
+    scoreboard() {
         this.removeGame();
-        
-        //GUI Elemnt Skapas
+
+        //GUI Element Skapas
         createText("numberGuessTitle", "Gissa Talet", "white", FONTTYPE1);
+
+        createText("resultsTitle", "Resultat:", "white", FONTTYPE3);
+
+        createText("correctNumberText", `Rätt siffra var ${this.randomNumber}`);
+
+        createText("guessAmountText", `Du listade ut det efter ${this.guessAmount} gissningar`);
+
+        createButton("restartButton", "Försök igen?", this.resetGame, this);
 
         // GUI Element indelas i minigames
         let numberGuessTitle = document.getElementById("numberGuessTitle");
         this.guiElements.push(numberGuessTitle);
+
+        let resultsTitle = document.getElementById("resultsTitle");
+        this.guiElements.push(resultsTitle);
+        
+        let correctNumberText = document.getElementById("correctNumberText");
+        this.guiElements.push(correctNumberText);
+        
+        let guessAmountText = document.getElementById("guessAmountText");
+        this.guiElements.push(guessAmountText);
+
+        let restartButton = document.getElementById("restartButton");
+        this.guiElements.push(restartButton);
+
+    }
+
+    guessSubmitted() {
+        this.guessAmount += 1;
+        
+        let numberGuessInput = document.getElementById("userGuess");
+        let numberOfGuesses = document.getElementById("numberOfGuesses");
+        let bigOrSmallGuess = document.getElementById("bigOrSmallGuess");
+
+        // kollar om gissningen är samma, mindre eller större 
+        if (String(numberGuessInput.value) === String(this.randomNumber)) {
+            this.scoreboard();
+        }else if (numberGuessInput.value < this.randomNumber) {
+            this.guessFeedback = "liten";
+        }else {
+            this.guessFeedback = "stor";
+        }
+
+        //uppdaterar texten
+        numberOfGuesses.innerText = `Du har gjort ${this.guessAmount} gissningar`;
+        bigOrSmallGuess.innerText = `Din gissning var för ${this.guessFeedback}`;
+    }
+
+    numberGuessStart() {
+        this.removeGame();
+
+        this.randomNumber = Math.floor(Math.random() * 100) + 1;
+
+        //GUI Elemnt Skapas
+        createText("numberGuessTitle", "Gissa Talet", "white", FONTTYPE1);
+        
+        createText("numberOfGuesses", `Du har gjort ${this.guessAmount} gissningar`, "white", FONTTYPE2);
+        createText("bigOrSmallGuess", "", "white", FONTTYPE2);
+        
+        createTextInputField("userGuess", "Gissa här!");
+        
+        createButton("confirmGuessButton", "Gissa", this.guessSubmitted, this);
+        
+        // GUI Element indelas i minigames
+        let numberGuessTitle = document.getElementById("numberGuessTitle");
+        this.guiElements.push(numberGuessTitle);
+        
+        let numberOfGuesses = document.getElementById("numberOfGuesses");
+        this.guiElements.push(numberOfGuesses);
+        
+        let bigOrSmallGuess = document.getElementById("bigOrSmallGuess");
+        this.guiElements.push(bigOrSmallGuess);
+        
+        let numberGuessInput = document.getElementById("userGuess");
+        this.guiElements.push(numberGuessInput);
+        
+        let confirmGuessButton = document.getElementById("confirmGuessButton");
+        this.guiElements.push(confirmGuessButton);
     }
 } 
 
@@ -304,6 +381,15 @@ function createButton(id, name, onclick, minigame, src = null, height = 0, width
     }else {
         root.appendChild(button);
     }
+}
+
+function createTextInputField(id, placeholder) {
+    let inputfield = document.createElement("INPUT");
+    inputfield.setAttribute("id", id);
+    inputfield.placeholder = placeholder;
+    inputfield.type = "number";
+
+    root.appendChild(inputfield);
 }
 
 function activateGame(game, removedGame) {
