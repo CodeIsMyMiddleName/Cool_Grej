@@ -223,6 +223,9 @@ class NumberGuess extends Minigame{
     }
 
     createGame() {
+        this.guessAmount = 0;
+        this.guessFeedback = "";
+        
         //GUI Element Skapas
         createText("numberGuessTitle", "Gissa Talet", "white", FONTTYPE1);
         
